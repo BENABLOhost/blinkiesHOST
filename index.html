@@ -1,70 +1,56 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="width:100%; height:100%; margin:0; padding:0; background-color:#121212; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blinky Copier</title>
-    <style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EaglercraftX 1.8.8</title>
+  <link rel="shortcut icon" href="/img/game.png" type="image/png">
   <style>
     body {
-        background-color: #121212;
-        color: #1eff00;
-        font-family: Arial, sans-serif;
+      margin: 0;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #121212;
     }
-    .blinky-container {
-        height: 150px;
-        width: 350px;
-        border: 1px solid #00ff1a;
-        font: 16px/26px Georgia, Garamond, Serif;
-        overflow: auto;
-        background-color: #1a1a1a;
+    #game_frame {
+      width: 100%;
+      height: 100%;
+      max-width: 1280px;
+      max-height: 720px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
     }
-    .blinky {
-        cursor: pointer;
-        margin: 5px;
+    /* Additional styling to match the screenshot */
+    .button {
+      background-color: #1e88e5;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin: 5px;
+      cursor: pointer;
+      border-radius: 4px;
+      font-size: 1em;
     }
-    img {
-        max-width: 100px;
-        max-height: 100px;
+    .button:hover {
+      background-color: #1565c0;
     }
-</style>
-    </style>
+  </style>
 </head>
 <body>
-    <div class="blinky-container">
-        <img class="blinky" src="https://blinki.es/blinkies/other/books-rule.gif" alt="Books Rule" onclick="copyBlinky(this)"/>
-        <img class="blinky" src="https://blinki.es/blinkies/tv/kermit-was-here.gif" alt="Kermit Was Here" onclick="copyBlinky(this)"/>
-        <img class="blinky" src="https://blinki.es/blinkies/animal/black-cats-are-lucky.gif" alt="Black Cats Are Lucky" onclick="copyBlinky(this)"/>
-        <img class="blinky" src="https://shishka.neocities.org/shishka/img/blinkies/140.gif" alt="Blinky 140" onclick="copyBlinky(this)"/>
-        <img class="blinky" src="https://shishka.neocities.org/shishka/img/blinkies/96.gif" alt="Blinky 96" onclick="copyBlinky(this)"/>
-        <img class="blinky" src="https://shishka.neocities.org/shishka/img/blinkies/94.gif" alt="Blinky 94" onclick="copyBlinky(this)"/>
-        <img class="blinky" src="https://blinki.es/blinkies/animal/cat-lover.gif" alt="Cat Lover" onclick="copyBlinky(this)"/>
-        <img class="blinky" src="https://blinki.es/blinkies/food/bottled-water.gif" alt="Bottled Water" onclick="copyBlinky(this)"/>
-        <img class="blinky" src="https://blinki.es/blinkies/tech/computer-addict.gif" alt="Computer Addict" onclick="copyBlinky(this)"/>
-        <img class="blinky" src="https://shishka.neocities.org/shishka/img/blinkies/129.gif" alt="Blinky 129" onclick="copyBlinky(this)"/>
-        <img class="blinky" src="https://shishka.neocities.org/shishka/img/blinkies/74.gif" alt="Blinky 74" onclick="copyBlinky(this)"/>
-        <img class="blinky" src="https://blinki.es/blinkies/animal/when-pigs-fly.gif" alt="When Pigs Fly" onclick="copyBlinky(this)"/>
-        <img class="blinky" src="https://blinki.es/blinkies/tv/blues-clues.gif" alt="Blue's Clues" onclick="copyBlinky(this)"/>
-        <img class="blinky" src="https://blinki.es/blinkies/tech/born-to-surf-the-net.gif" alt="Born to Surf the Net" onclick="copyBlinky(this)"/>
-        <img class="blinky" src="https://blinki.es/blinkies/tech/send-email.gif" alt="Send Email" onclick="copyBlinky(this)"/>
-        <img class="blinky" src="https://blinki.es/blinkies/other/another-blinky.gif" alt="Another Blinky" onclick="copyBlinky(this)"/>
-        <img class="blinky" src="https://blinki.es/blinkies/food/hot-cocoa.gif" alt="Hot Cocoa" onclick="copyBlinky(this)"/>
-        <img class="blinky" src="https://blinki.es/blinkies/food/oreos.gif" alt="Oreos" onclick="copyBlinky(this)"/>
-        <img class="blinky" src="https://shishka.neocities.org/shishka/img/blinkies/123.gif" alt="Blinky 123" onclick="copyBlinky(this)"/>
-        <img class="blinky" src="https://blinki.es/blinkies/love/be-my-valentine.gif" alt="Be My Valentine" onclick="copyBlinky(this)"/>
-    </div>
+  <div id="game_frame"></div>
 
-    <script>
-        function copyBlinky(element) {
-            const blinkyHTML = element.outerHTML;
-            const tempTextarea = document.createElement('textarea');
-            tempTextarea.value = blinkyHTML;
-            document.body.appendChild(tempTextarea);
-            tempTextarea.select();
-            document.execCommand('copy');
-            document.body.removeChild(tempTextarea);
-            alert('Blinky HTML copied to clipboard!');
-        }
-    </script>
+  <script>
+    window.__eaglercraftLoaderClient = {
+      container: "game_frame",
+      name: "EaglercraftX 1.8",
+      file: "net.lax1dude.eaglercraft.v1_8.client",
+      cid: "bafybeigvjbotqwm5mdjkvfqwxylpvap35lmya4d3jo6sn76pqzm2gub52i",
+      path: "",
+      dlSize: 14027305,
+      gzip: true
+    };
+  </script>
+  <script src="/js/loader.js"></script>
 </body>
 </html>

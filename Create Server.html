@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Create Server - Opencraft</title>
+    <style>
+        /* Minecraft Font */
+        @font-face {
+            font-family: 'Minecraft';
+            src: url('MinecraftRegular-Bmg3.otf') format('truetype');
+        }
+        @font-face {
+            font-family: 'Minecraft Bold';
+            src: url('MinecraftBold-nMK1.otf') format('truetype');
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            background-image: url('Dirt.webp');
+            background-repeat: repeat;
+            background-color: rgba(0, 0, 0, 0.3);
+            background-blend-mode: multiply;
+            image-rendering: pixelated;
+            font-family: 'Minecraft', sans-serif;
+            color: rgb(255, 255, 255);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        
+        .container {
+            width: 854px;
+            background-color: rgba(0, 0, 0, 0.7);
+            border: 4px solid #4a4a4a;
+            box-shadow: 0 0 0 2px #1a1a1a;
+            padding: 20px;
+        }
+        
+        .title {
+            background: linear-gradient(to right, #3c3c3c, #2d2d2d);
+            color: white;
+            padding: 8px 12px;
+            border-bottom: 2px solid #1a1a1a;
+            font-family: 'Minecraft Bold', sans-serif;
+            font-size: 18px;
+            text-shadow: 2px 2px 0 #1a1a1a;
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-label {
+            display: block;
+            font-family: 'Minecraft', sans-serif;
+            color: #aaaaaa;
+            margin-bottom: 5px;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 8px;
+            font-family: 'Minecraft', sans-serif;
+            background-color: #2d2d2d;
+            border: 2px solid #4a4a4a;
+            color: white;
+            box-sizing: border-box;
+        }
+        
+        .form-select {
+            width: 100%;
+            padding: 8px;
+            font-family: 'Minecraft', sans-serif;
+            background-color: #2d2d2d;
+            border: 2px solid #4a4a4a;
+            color: white;
+        }
+        
+        .form-checkbox {
+            margin-right: 10px;
+        }
+        
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        
+        .button {
+            background: linear-gradient(to bottom, #4c7f9e, #3a5d7a);
+            color: white;
+            border: 2px solid #1a1a1a;
+            padding: 8px 20px;
+            font-family: 'Minecraft', sans-serif;
+            font-size: 16px;
+            cursor: pointer;
+            text-shadow: 1px 1px 0 #1a1a1a;
+            image-rendering: pixelated;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .button:hover {
+            background: linear-gradient(to bottom, #5a8fac, #487095);
+        }
+        
+        .button-secondary {
+            background: linear-gradient(to bottom, #6d6d6d, #575757);
+        }
+        
+        .button-secondary:hover {
+            background: linear-gradient(to bottom, #7b7b7b, #656565);
+        }
+        
+        .rainbow-text {
+            background: linear-gradient(124deg, #ff2400, #e81d1d, #e8b71d, #e3e81d, #1de840, #1ddde8, #2b1de8, #dd00f3);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: rainbow 3s linear infinite;
+            background-size: 400% 100%;
+        }
+        
+        .rainbow-bold {
+            font-family: 'Minecraft Bold', sans-serif;
+            background: linear-gradient(124deg, #ff2400, #e81d1d, #e8b71d, #e3e81d, #1de840, #1ddde8, #2b1de8, #dd00f3);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: rainbow 3s linear infinite;
+            background-size: 400% 100%;
+        }
+        
+        @keyframes rainbow {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+        
+        .name-preview {
+            margin-top: 5px;
+            padding: 5px;
+            background-color: rgba(0, 0, 0, 0.5);
+            border: 1px solid #4a4a4a;
+        }
+        
+        .tab-container {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #4a4a4a;
+        }
+        
+        .tab {
+            padding: 8px 16px;
+            cursor: pointer;
+            background-color: #2d2d2d;
+            border: 2px solid #4a4a4a;
+            border-bottom: none;
+            margin-right: 5px;
+        }
+        
+        .tab.active {
+            background-color: #3a3a3a;
+            border-bottom: 2px solid #3a3a3a;
+            margin-bottom: -2px;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="title">Create Your Opencraft Server</div>
+        
+        <div class="tab-container">
+            <div class="tab active" data-tab="create">Create New Server</div>
+            <div class="tab" data-tab="promote">Promote Existing Server</div>
+        </div>
+        
+        <!-- Create Server Tab -->
+        <div id="create" class="tab-content active">
+            <form id="serverForm">
+                <div class="form-group">
+                    <label class="form-label">Server Name (use &lt;r&gt; for rainbow, &lt;rb&gt; for bold rainbow)</label>
+                    <input type="text" id="serverName" class="form-input" placeholder="My Awesome Server">
+                    <div class="name-preview" id="namePreview"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Custom Domain (e.g., myserver.opencraft)</label>
+                    <div style="display: flex; align-items: center;">
+                        <input type="text" id="serverDomain" class="form-input" placeholder="myserver" style="flex: 1;">
+                        <span style="margin: 0 5px;">.opencraft</span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Server Type</label>
+                    <select id="serverType" class="form-select">
+                        <option value="vanilla">Vanilla</option>
+                        <option value="paper">PaperMC</option>
+                        <option value="spigot">Spigot</option>
+                        <option value="fabric">Fabric</option>
+                        <option value="forge">Forge</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Minecraft Version</label>
+                    <select id="serverVersion" class="form-select">
+                        <option value="1.20.1">1.20.1 (Latest)</option>
+                        <option value="1.19.4">1.19.4</option>
+                        <option value="1.18.2">1.18.2</option>
+                        <option value="1.17.1">1.17.1</option>
+                        <option value="1.16.5">1.16.5</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">World Type</label>
+                    <select id="worldType" class="form-select">
+                        <option value="default">Default</option>
+                        <option value="flat">Flat</option>
+                        <option value="large_biomes">Large Biomes</option>
+                        <option value="amplified">Amplified</option>
+                        <option value="single_biome">Single Biome</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Import World (from Aternos or other host)</label>
+                    <input type="text" id="worldImport" class="form-input" placeholder="Paste world download link or select file">
+                    <input type="file" id="worldFile" class="form-input" style="margin-top: 5px;">
+                </div>
+                
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="isPrivate" class="form-checkbox">
+                        <span class="form-label">Make server private (only people with link can join)</span>
+                    </label>
+                </div>
+                
+                <div class="form-actions">
+                    <a href="index.html" class="button button-secondary">Back to Server List</a>
+                    <button type="submit" class="button">Create Server</button>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Promote Server Tab -->
+        <div id="promote" class="tab-content">
+            <form id="promoteForm">
+                <div class="form-group">
+                    <label class="form-label">Server Address (IP or domain)</label>
+                    <input type="text" id="serverAddress" class="form-input" placeholder="play.example.com">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Port (default is 25565)</label>
+                    <input type="number" id="serverPort" class="form-input" placeholder="25565" value="25565">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Server Name</label>
+                    <input type="text" id="promoteName" class="form-input" placeholder="My Awesome Server">
+                    <div class="name-preview" id="promoteNamePreview"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="promotePrivate" class="form-checkbox">
+                        <span class="form-label">Make listing private (only people with link can see)</span>
+                    </label>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Verification Method</label>
+                    <select id="verificationMethod" class="form-select">
+                        <option value="dns">DNS Record Verification</option>
+                        <option value="file">File Upload Verification</option>
+                        <option value="aternos">Aternos Account Link</option>
+                    </select>
+                </div>
+                
+                <div class="form-actions">
+                    <a href="index.html" class="button button-secondary">Back to Server List</a>
+                    <button type="submit" class="button">Promote Server</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Tab functionality
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                
+                tab.classList.add('active');
+                document.getElementById(tab.dataset.tab).classList.add('active');
+            });
+        });
+
+        // Name preview functionality
+        document.getElementById('serverName').addEventListener('input', updateNamePreview);
+        document.getElementById('promoteName').addEventListener('input', updatePromoteNamePreview);
+        
+        function updateNamePreview() {
+            const name = document.getElementById('serverName').value;
+            const preview = document.getElementById('namePreview');
+            preview.innerHTML = formatServerName(name);
+        }
+        
+        function updatePromoteNamePreview() {
+            const name = document.getElementById('promoteName').value;
+            const preview = document.getElementById('promoteNamePreview');
+            preview.innerHTML = formatServerName(name);
+        }
+        
+        function formatServerName(name) {
+            if (name.includes('<rb>') && name.includes('</rb>')) {
+                return name.replace('<rb>', '').replace('</rb>', '')
+                    .split('<r>').join('').split('</r>').join('')
+                    .split('<rb>').join('').split('</rb>').join('')
+                    + ' → <span class="rainbow-bold">' + 
+                    name.replace(/<rb>(.*?)<\/rb>/g, '$1')
+                    .replace(/<r>(.*?)<\/r>/g, '$1') + '</span>';
+            }
+            else if (name.includes('<r>') && name.includes('</r>')) {
+                return name.replace('<r>', '').replace('</r>', '')
+                    .split('<rb>').join('').split('</rb>').join('')
+                    + ' → <span class="rainbow-text">' + 
+                    name.replace(/<r>(.*?)<\/r>/g, '$1') + '</span>';
+            }
+            return name || 'Preview will appear here';
+        }
+        
+        // Form submissions
+        document.getElementById('serverForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            createServer();
+        });
+        
+        document.getElementById('promoteForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            promoteServer();
+        });
+        
+        function createServer() {
+            const name = document.getElementById('serverName').value;
+            const domain = document.getElementById('serverDomain').value;
+            const type = document.getElementById('serverType').value;
+            const version = document.getElementById('serverVersion').value;
+            const worldType = document.getElementById('worldType').value;
+            const worldImport = document.getElementById('worldImport').value;
+            const isPrivate = document.getElementById('isPrivate').checked;
+            
+            // In a real implementation, you would send this data to your server
+            console.log('Creating server:', {
+                name, domain, type, version, worldType, worldImport, isPrivate
+            });
+            
+            // Show success message
+            alert(`Server created successfully!\n\nName: ${name}\nDomain: ${domain}.opencraft\nType: ${type} ${version}\nWorld: ${worldType}${worldImport ? ' (imported)' : ''}\nVisibility: ${isPrivate ? 'Private' : 'Public'}`);
+            
+            // Redirect back to main page
+            window.location.href = 'index.html';
+        }
+        
+        function promoteServer() {
+            const address = document.getElementById('serverAddress').value;
+            const port = document.getElementById('serverPort').value;
+            const name = document.getElementById('promoteName').value;
+            const isPrivate = document.getElementById('promotePrivate').checked;
+            const verification = document.getElementById('verificationMethod').value;
+            
+            // In a real implementation, you would verify and register the server
+            console.log('Promoting server:', {
+                address, port, name, isPrivate, verification
+            });
+            
+            // Show success message
+            alert(`Server promoted successfully!\n\nName: ${name}\nAddress: ${address}:${port}\nVisibility: ${isPrivate ? 'Private' : 'Public'}\nVerification: ${verification}`);
+            
+            // Redirect back to main page
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>
