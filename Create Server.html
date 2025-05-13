@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Create Server</title>
     <link rel="icon" type="image/x-icon" href="USB_Charger.ico">
-    <style>
+<style>
         /* Minecraft Font */
         @font-face {
             font-family: 'Minecraft';
@@ -192,7 +192,7 @@
         <div class="title">Create Your Opencraft Server</div>
         
         <div class="tab-container">
-            <div class="tab active" data-tab="create">Create New Server</div>
+            <div class="tab active" data-tab="create">Customize Server</div>
             <div class="tab" data-tab="promote">Promote Existing Server</div>
         </div>
         
@@ -205,13 +205,7 @@
                     <div class="name-preview" id="namePreview"></div>
                 </div>
                 
-                <div class="form-group">
-                    <label class="form-label">Custom Domain (e.g., myserver.opencraft)</label>
-                    <div style="display: flex; align-items: center;">
-                        <input type="text" id="serverDomain" class="form-input" placeholder="myserver" style="flex: 1;">
-                        <span style="margin: 0 5px;">.opencraft</span>
-                    </div>
-                </div>
+                
                 
                 <div class="form-group">
                     <label class="form-label">Server Type</label>
@@ -247,8 +241,8 @@
                 </div>
                 
                 <div class="form-group">
-                    <label class="form-label">Import World (from Aternos or other host)</label>
-                    <input type="file" id="worldFile" class="form-input" style="margin-top: 5px;">
+                    <label class="form-label">Select an icon of the server:</label>
+                    <input type="file" id="icon" class="form-input" style="margin-top: 5px;">
                 </div>
                 
                 <div class="form-group">
@@ -278,25 +272,16 @@
                     <input type="number" id="serverPort" class="form-input" placeholder="25565" value="25565">
                 </div>
                 
-                <div class="form-group">
-                    <label class="form-label">Server Name</label>
-                    <input type="text" id="promoteName" class="form-input" placeholder="My Awesome Server">
-                    <div class="name-preview" id="promoteNamePreview"></div>
-                </div>
+            
+                
                 
                 <div class="form-group">
-                    <label>
-                        <input type="checkbox" id="promotePrivate" class="form-checkbox">
-                        <span class="form-label">Make listing private (only people with link can see)</span>
-                    </label>
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">Verification Method</label>
+                    <label class="form-label">Server hosted by:</label>
                     <select id="verificationMethod" class="form-select">
-                        <option value="dns">DNS Record Verification</option>
-                        <option value="file">File Upload Verification</option>
-                        <option value="aternos">Aternos Account Link</option>
+                        <option value="Aternos">Aternos</option>
+                        <option value="Modrinth">Modrinth</option>
+                        <option value="Scalacube">Scalacube</option>
+                         <option value="Other">Other</option>
                     </select>
                 </div>
                 
