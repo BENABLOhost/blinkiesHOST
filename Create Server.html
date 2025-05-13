@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Create Server - Opencraft</title>
+    <title>Create Server</title>
     <style>
         /* Minecraft Font */
         @font-face {
@@ -174,9 +174,19 @@
         .tab-content.active {
             display: block;
         }
+
+        .rainbow-example {
+            background: linear-gradient(124deg, #ff2400, #e81d1d, #e8b71d, #e3e81d, #1de840, #1ddde8, #2b1de8, #dd00f3);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: rainbow 3s linear infinite;
+            background-size: 400% 100%;
+        }
     </style>
 </head>
 <body>
+    
     <div class="container">
         <div class="title">Create Your Opencraft Server</div>
         
@@ -189,7 +199,7 @@
         <div id="create" class="tab-content active">
             <form id="serverForm">
                 <div class="form-group">
-                    <label class="form-label">Server Name (use &lt;r&gt; for rainbow, &lt;rb&gt; for bold rainbow)</label>
+                    <label class="form-label">Server Name <div class="rainbow-example">(use &lt;r&gt; for rainbow, &lt;rb&gt; for bold rainbow)</div></label>
                     <input type="text" id="serverName" class="form-input" placeholder="My Awesome Server">
                     <div class="name-preview" id="namePreview"></div>
                 </div>
@@ -237,7 +247,6 @@
                 
                 <div class="form-group">
                     <label class="form-label">Import World (from Aternos or other host)</label>
-                    <input type="text" id="worldImport" class="form-input" placeholder="Paste world download link or select file">
                     <input type="file" id="worldFile" class="form-input" style="margin-top: 5px;">
                 </div>
                 
