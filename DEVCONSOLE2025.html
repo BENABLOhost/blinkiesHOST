@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Opensesame - Developer Portal</title>
     <link rel="icon" type="image/x-icon" href="Bedrock_JE2_BE2.ico">
-    <style>
+ <style>
         @font-face {
             font-family: 'Minecraft';
             src: url('MinecraftRegular-Bmg3.otf') format('woff2');
@@ -340,6 +340,10 @@
     </style>
 </head>
 <body>
+     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
+    
     <!-- Login Screen -->
     <div class="rainbow-border">
         <div class="login-container" id="login-screen">
@@ -512,6 +516,209 @@
             </div>
         </div>
     </div>
+  <script>
+        // Firebase configuration - REPLACE WITH YOUR ACTUAL CONFIG
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT.firebaseapp.com",
+            databaseURL: "https://YOUR_PROJECT.firebaseio.com",
+            projectId: "YOUR_PROJECT",
+            storageBucket: "YOUR_PROJECT.appspot.com",
+            messagingSenderId: "YOUR_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+        
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        const auth = firebase.auth();
+        
+        // [Previous login form submission code needs to be updated]
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const errorMessage = document.getElementById('error-message');
+            
+            // Firebase authentication
+            auth.signInWithEmailAndPassword(username + "@opensesame.com", password)
+                .then((userCredential) => {
+                    // Successful login
+                    errorMessage.style.display = 'none';
+                    document.getElementById('login-screen').style.display = 'none';
+                    document.getElementById('dev-panel').style.display = 'block';
+                    
+                    // Update UI with logged in user
+                    const user = userCredential.user;
+                    document.getElementById('username-display').textContent = username;
+                    document.getElementById('user-avatar').textContent = 
+                        username === 'Ben_Katsman' ? 'BK' : 'K12';
+                    
+                    // Load servers
+                    loadServers();
+                })
+                .catch((error) => {
+                    // Failed login
+                    errorMessage.style.display = 'block';
+                    console.error("Login error:", error);
+                });
+        });
+        
+        // Server Control Functions
+        function loadServers() {
+            const serverListRef = database.ref('servers');
+            serverListRef.on('value', (snapshot) => {
+                const servers = snapshot.val();
+                const serverList = document.getElementById('server-list');
+                serverList.innerHTML = '';
+                
+                if (servers) {
+                    Object.keys(servers).forEach((serverId) => {
+                        const server = servers[serverId];
+                        const row = document.createElement('tr');
+                        
+                        row.innerHTML = `
+                            <td>
+                                <span class="status-indicator ${server.online ? 'status-online' : 'status-offline'}"></span>
+                                ${server.online ? 'Online' : 'Offline'}
+                            </td>
+                            <td>${server.name}</td>
+                            <td>${server.address}</td>
+                            <td>${server.version}</td>
+                            <td>${server.players}</td>
+                            <td>${server.promoted ? 'Yes' : 'No'}</td>
+                            <td class="action-buttons">
+                                <button class="table-button edit-button" data-id="${serverId}">Edit</button>
+                                <button class="table-button delete-button" data-id="${serverId}">Delete</button>
+                                <button class="table-button promote-button" data-id="${serverId}">
+                                    ${server.promoted ? 'Demote' : 'Promote'}
+                                </button>
+                            </td>
+                        `;
+                        
+                        serverList.appendChild(row);
+                    });
+                    
+                    // Add event listeners to buttons
+                    document.querySelectorAll('.edit-button').forEach(btn => {
+                        btn.addEventListener('click', (e) => editServer(e.target.dataset.id));
+                    });
+                    
+                    document.querySelectorAll('.delete-button').forEach(btn => {
+                        btn.addEventListener('click', (e) => deleteServer(e.target.dataset.id));
+                    });
+                    
+                    document.querySelectorAll('.promote-button').forEach(btn => {
+                        btn.addEventListener('click', (e) => togglePromoteServer(e.target.dataset.id));
+                    });
+                }
+            });
+        }
+        
+        function editServer(serverId) {
+            // Implementation for editing a server
+            const serverRef = database.ref('servers/' + serverId);
+            serverRef.once('value').then((snapshot) => {
+                const server = snapshot.val();
+                
+                // Fill the form with server data
+                document.getElementById('server-name').value = server.name;
+                document.getElementById('server-address').value = server.address;
+                document.getElementById('server-version').value = server.version;
+                document.getElementById('server-players').value = server.players;
+                document.getElementById('server-description').value = server.description || '';
+                document.getElementById('server-promoted').checked = server.promoted || false;
+                document.getElementById('server-online').checked = server.online || false;
+                
+                // Show the form
+                document.getElementById('add-server-form').style.display = 'block';
+                document.getElementById('save-server').dataset.id = serverId;
+                document.getElementById('save-server').textContent = 'Update Server';
+            });
+        }
+        
+        function deleteServer(serverId) {
+            if (confirm('Are you sure you want to delete this server?')) {
+                database.ref('servers/' + serverId).remove()
+                    .then(() => {
+                        console.log('Server deleted successfully');
+                    })
+                    .catch((error) => {
+                        console.error('Error deleting server:', error);
+                    });
+            }
+        }
+        
+        function togglePromoteServer(serverId) {
+            const serverRef = database.ref('servers/' + serverId);
+            serverRef.once('value').then((snapshot) => {
+                const server = snapshot.val();
+                serverRef.update({
+                    promoted: !server.promoted
+                });
+            });
+        }
+        
+        // Add server form functionality
+        document.getElementById('add-server-btn').addEventListener('click', () => {
+            document.getElementById('add-server-form').style.display = 'block';
+            document.getElementById('save-server').dataset.id = '';
+            document.getElementById('save-server').textContent = 'Add Server';
+            
+            // Clear form
+            document.getElementById('server-name').value = '';
+            document.getElementById('server-address').value = '';
+            document.getElementById('server-version').value = '';
+            document.getElementById('server-players').value = '';
+            document.getElementById('server-description').value = '';
+            document.getElementById('server-promoted').checked = false;
+            document.getElementById('server-online').checked = true;
+        });
+        
+        document.getElementById('cancel-add').addEventListener('click', () => {
+            document.getElementById('add-server-form').style.display = 'none';
+        });
+        
+        document.getElementById('save-server').addEventListener('click', () => {
+            const serverData = {
+                name: document.getElementById('server-name').value,
+                address: document.getElementById('server-address').value,
+                version: document.getElementById('server-version').value,
+                players: document.getElementById('server-players').value,
+                description: document.getElementById('server-description').value,
+                promoted: document.getElementById('server-promoted').checked,
+                online: document.getElementById('server-online').checked,
+                lastUpdated: firebase.database.ServerValue.TIMESTAMP
+            };
+            
+            const serverId = document.getElementById('save-server').dataset.id;
+            
+            if (serverId) {
+                // Update existing server
+                database.ref('servers/' + serverId).update(serverData)
+                    .then(() => {
+                        document.getElementById('add-server-form').style.display = 'none';
+                    })
+                    .catch((error) => {
+                        console.error('Error updating server:', error);
+                    });
+            } else {
+                // Add new server
+                database.ref('servers').push(serverData)
+                    .then(() => {
+                        document.getElementById('add-server-form').style.display = 'none';
+                    })
+                    .catch((error) => {
+                        console.error('Error adding server:', error);
+                    });
+            }
+        });
+        
+        document.getElementById('refresh-servers').addEventListener('click', loadServers);
+        
+        // [Previous sidebar navigation and terminal code remains the same]
+    </script>
 
     <script>
         
