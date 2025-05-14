@@ -146,27 +146,8 @@
             text-shadow: 2px 2px 0 #000;
             box-shadow: inset -4px -4px 0px 0px rgba(0,0,0,0.2);
             margin-bottom: 16px;
-            position: relative;
-            overflow: hidden;
-            z-index: 1;
         }
-
-        .join-button.custom-bg {
-            background: none;
-        }
-
-        .join-button .button-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-size: 50px 50px; /* Size of each repeated tile */
-            background-repeat: repeat;
-            z-index: -1;
-            opacity: 0.8;
-        }
-
+        
         .join-button:hover {
             animation: rainbow 1.5s linear infinite;
             box-shadow: inset -4px -4px 0px 0px rgba(0,0,0,0.2),
@@ -187,49 +168,6 @@
             text-decoration: none;
         }
         
-        /* IP/Port Preview Styles */
-        .ip-preview {
-            width: 100%;
-            background: rgba(30, 30, 30, 0.95);
-            border-radius: 5px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-            padding: 20px;
-            color: #FFFFFF;
-            border: 2px solid #555;
-            margin-top: 20px;
-        }
-        
-        .ip-display {
-            font-family: 'Minecraft';
-            background-color: #2d2d2d;
-            border: 2px solid #4a4a4a;
-            padding: 10px;
-            margin: 10px 0;
-            text-align: center;
-            font-size: 16px;
-            word-break: break-all;
-        }
-        
-        .copy-button {
-            width: 100%;
-            background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMQAAAAPCAAAAACe4j/AAAAEuElEQVRIx1WWS5Ibuw5EtddrdRRJJE4iSKrb4c2/AUuy30iK+jEBHCTwAICMCgAKiGhKVQUwKzJHQo4mQGBy7AIvk1E2AQKhFt6bUGD1gILy0DkD4dmzACkGyzCScgFgQmLZr4LpQpC56QB2wgSYE8i1fd6xd1yPHIAKwAs14Undx2LIHK0X6vdFbzTa6CNBLQE8Y5rapn7oAl3KSDKC6cLfL6sLnIVG7ffnyUgvQ6rwLjUZdIVqWz0iEXXCZ+TJsV8feUdoPHDk+a/IeAbq0ldLT59jtHweHwmKS6gFSUYCqKcVsPami1pEnqolkCMBiAS87FXTICp03geYUr8TV8un3KuyC0BfTUzihOCdwjUya1bkT9VWe+AaFOoJzHdtERXRe/eulyEDhC6pjYwr+JQuIDU9/0wQBnJEAkd+9i6IRTJrV7YWnGfwLA6ESphkBoCu88M0YH1CTTOiRUpDdwpGkkP5yL9phhwn+QVxDarAXq513y9bLKgxBGR/CjDyMl4ECd6lO82CaMLbEHGHp1R8ePDERj392ssaCOigNjJ+dXXl6OLUFfVx6dA1BFJLlHpkUHPam095C3QJLIjn6OLIOB3xe0JS85Zd+govg1/z/UhtG3RdVW98yxNp5I0Vtf/U+6y/dJ/yHtSK4q7G9ARscC3/Df/kXTwiT3d6ovjEISLJIVEvBwWeCXlALZTbpy85xqWuf3sNiBBUmYjI+BqN6aNQqDWpipSYf3W1nOV/WALoykjIiCPreSn97UigsjZdPA5s3AmCDIxaVO0Fa1fV/qkaiijPPz/bEeRyLSBDI8K8j37TO8aH7vmOqUUQ1DboYhvqd+FlFGEo+2T75MbLGnjvPeu7Pl521Ap14dcR3h7p75qv4xieqnNDoyCPLt/yKkf5gOUXl+6S3d9Syq/982fz+fhpsm28C5EhJcxsWWQke6KoPMA7tqm7kKcrn6FLhWcoqCNCxDPyQ8wEKR73nIlEX8GpARSJX7/rzeNtWPD/Dl2IwtOYMwV7osGsHYJanzeU7KqIZVCTcrT0IEbyD4d1e1dkBtW2qLhLXK7a1ogDqsjI1DR4PY7nHEqfF9tn8HUJL+eQ/lGOXdwI1++57CqgmDaReM9CZYLAk4D4ymqti4KZI9Htz9OnrcuOhCQEqJfXaxHPAFG/l/ee1GFJPXmPryYUiUGPutnRGXkagmnjHk5RNpm7xxiclm6CjJEQ4+MD4xPmuT9Ef4b3YT3B51a7d4Np76PF0cavuC+SoaH6PlilipEakoJBJETWT3k7Hf+1REPj2fIx95t5ct6u9S5v3KM2fv2Ve29ax9yC98zT2IZot61MHyYtdPF92nguZ29xfcVxSu9Nj5Gl8G3wcVoW8n1Q/f6BHFEAyy5R2aRIdYH8XfV4453vHKcnqarXPD6mdrD0rlVV5xBPF2xuJM5Oo0SdaaqGMjJva7ii6bYv74IzPMo5pGebpu72ghypwTR+WWDuhQOkFijGyAzF3GXh11lEH0hkPINZivpTqLEtVm2j1hVcn/S0//q0es5dbyxOErxKivQ+bHotvzcT3/XztPf20XqG6fJZMePT2X6ts+nlm9LoSYHMiHuJjGXniB7v2fo/5qT4nuxYg6AAAAAASUVORK5CYII=);
-	font-family: 'MinecraftiaRegular';
-  	border-color: #AAA #565656 #565656 #AAA;
-  	text-shadow: 3px 3px #4C4C4C;
-            color: white;
-            border: 2px solid #1a1a1a;
-            padding: 8px;
-            font-family: 'Minecraft';
-            font-size: 14px;
-            cursor: pointer;
-            text-shadow: 1px 1px 0 #1a1a1a;
-            margin-top: 10px;
-        }
-        
-        .copy-button:hover {
-            background: linear-gradient(to bottom, #5a8fac, #487095);
-        }
-        
         @keyframes rainbow {
             0% { background-position: 0% center; }
             100% { background-position: 200% center; }
@@ -238,7 +176,6 @@
         /* Form Styles */
         .form-group {
             margin-bottom: 15px;
-            
         }
         
         .form-label {
@@ -267,7 +204,6 @@
             color: white;
             min-height: 100px;
             resize: vertical;
-            
         }
         
         .form-select {
@@ -290,7 +226,7 @@
         }
         
         .button {
-            background: linear-gradient(to bottom, #4c7f9e, #3a5d7a);
+              background: linear-gradient(to bottom, #4c7f9e, #3a5d7a);
             color: white;
             border: 2px solid #1a1a1a;
             padding: 8px 20px;
@@ -355,40 +291,6 @@
             margin-top: 5px;
             display: none;
         }
-        
-        .button-customization {
-            margin-top: 10px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        
-        .button-preview-container {
-            position: relative;
-            width: 100%;
-            height: 40px;
-        }
-        
-        .button-bg-preview {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        
-        .button-text-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            text-shadow: 2px 2px 0 #000;
-            font-family: 'Minecraft';
-            pointer-events: none;
-        }
     </style>
 </head>
 <body>
@@ -425,8 +327,6 @@
                         <label class="form-label">Server Icon</label>
                         <input type="file" id="serverIcon" class="form-input" accept="image/*">
                     </div>
-                    
-                    
                     
                     <div class="form-group">
                         <label class="form-label">Server Type</label>
@@ -511,73 +411,27 @@
             </div>
         </div>
         
-        <!-- Preview Section -->
+        <!-- Server Preview Card -->
         <div class="preview-container">
-            <div class="title">Preview of customization</div>
+            <div class="title">Server Preview</div>
             <div class="server-preview">
-                <div class="server-preview-title">Server Info:</div>
+                <div class="server-preview-title">Server Info</div>
                 <div class="server-icon-container">
-                    <img id="serverIconPreview" class="server-icon-preview" src="preview icon.jpg">
+                    <img id="serverIconPreview" class="server-icon-preview" src="https://yt3.googleusercontent.com/ytc/AIdro_nRBawueDy4A2hLalZPoCWcyppX48dJhGWbKlqCn6S7s8w=s900-c-k-c0x00ffffff-no-rj">
                     <div id="serverNamePreview" class="server-name-preview">My server</div>
                 </div>
                 <div id="serverStatsPreview" class="server-stats">Vanilla 1.20.1</div>
                 <div class="server-status">Creating...</div>
-                <div class="button-preview-container">
-                    <img id="joinButtonBgPreview" class="button-bg-preview" style="display: none;">
-                    <button id="joinButtonPreview" class="join-button">Join Server</button>
-                </div>
+                <button class="join-button">Join Server</button>
                 <div id="serverDescriptionPreview" class="server-description">
                     Description here!
                     <a id="serverLinkPreview" class="server-link" href="https://enteryourwebsitehere.com/" target="_blank">https://enteryourwebsitehere.com/</a>
                 </div>
             </div>
-            
-            <!-- IP/Port Preview -->
-            <div class="ip-preview">
-                <div class="title">Preview of IP & PORT</div>
-                <div class="ip-display" id="ipPreviewDisplay">play.myserver.com:25565</div>
-                <button class="copy-button" id="copyIpButton">Copy IP:Port</button>
-            </div>
         </div>
     </div>
 
     <script>
-
-         // Handle button background upload
-        document.getElementById('buttonBackground').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            const joinButton = document.getElementById('joinButtonPreview');
-            
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    // Remove any existing background element
-                    const existingBg = joinButton.querySelector('.button-bg');
-                    if (existingBg) {
-                        existingBg.remove();
-                    }
-                    
-                    // Create new background element
-                    const bgDiv = document.createElement('div');
-                    bgDiv.className = 'button-bg';
-                    bgDiv.style.backgroundImage = `url(${event.target.result})`;
-                    
-                    // Add to button
-                    joinButton.appendChild(bgDiv);
-                    joinButton.classList.add('custom-bg');
-                };
-                reader.readAsDataURL(file);
-            } else {
-                // Remove custom background
-                const bgDiv = joinButton.querySelector('.button-bg');
-                if (bgDiv) {
-                    bgDiv.remove();
-                }
-                joinButton.classList.remove('custom-bg');
-            }
-        });
-
-
         // Tab functionality
         const tabs = document.querySelectorAll('.tab');
         const tabContents = document.querySelectorAll('.tab-content');
@@ -632,9 +486,6 @@
                 
                 // Auto-fill promote form with values from create form
                 document.getElementById('promoteName').value = name;
-                
-                // Update IP preview with the new name
-                updateIpPreview();
             }
         });
 
@@ -662,16 +513,6 @@
             const serverVersion = document.getElementById('serverVersion').value;
             document.getElementById('serverStatsPreview').textContent = 
                 `${serverType.charAt(0).toUpperCase() + serverType.slice(1)} ${serverVersion}`;
-                
-            // Update join button text
-            const buttonText = document.getElementById('buttonText').value || 'Join Server';
-            document.getElementById('joinButtonPreview').textContent = buttonText;
-        };
-
-        // Update IP preview
-        const updateIpPreview = () => {
-            const name = document.getElementById('serverName').value.trim().toLowerCase().replace(/\s+/g, '-');
-            document.getElementById('ipPreviewDisplay').textContent = `play.${name || 'myserver'}.com:25565`;
         };
 
         // Handle icon upload preview
@@ -686,54 +527,14 @@
             }
         });
 
-        // Handle button background upload
-        document.getElementById('buttonBackground').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            const buttonPreview = document.getElementById('joinButtonBgPreview');
-            const joinButton = document.getElementById('joinButtonPreview');
-            
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    buttonPreview.src = event.target.result;
-                    buttonPreview.style.display = 'block';
-                    joinButton.style.display = 'none';
-                };
-                reader.readAsDataURL(file);
-            } else {
-                buttonPreview.style.display = 'none';
-                joinButton.style.display = 'block';
-            }
-        });
-
-        // Handle button text changes
-        document.getElementById('buttonText').addEventListener('input', function() {
-            const text = this.value || 'Join Server';
-            document.getElementById('joinButtonPreview').textContent = text;
-            document.getElementById('joinButtonTextPreview').textContent = text;
-        });
-
-        // Copy IP button functionality
-        document.getElementById('copyIpButton').addEventListener('click', function() {
-            const ipText = document.getElementById('ipPreviewDisplay').textContent;
-            navigator.clipboard.writeText(ipText).then(() => {
-                const originalText = this.textContent;
-                this.textContent = 'Copied!';
-                setTimeout(() => {
-                    this.textContent = originalText;
-                }, 2000);
-            });
-        });
-
         // Set up live updates for all form fields
         ['serverName', 'serverDescription', 'serverWebsite', 'serverType', 'serverVersion'].forEach(id => {
             document.getElementById(id).addEventListener('input', updatePreview);
             document.getElementById(id).addEventListener('change', updatePreview);
         });
 
-        // Initialize previews
+        // Initialize preview
         updatePreview();
-        updateIpPreview();
 
         // Form submissions
         document.getElementById('promoteForm').addEventListener('submit', function(e) {
