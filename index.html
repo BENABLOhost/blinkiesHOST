@@ -1,906 +1,164 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Minecraft Multiplayer</title>
-	<link rel="icon" type="image/x-icon" href="Glowing_Obsidian_BE1.ico">
-    <style>
-        /* Minecraft Font */
-        @font-face {
-            font-family: 'Minecraft';
-            src: url('MinecraftRegular-Bmg3.otf') format('truetype');
-        }
-        @font-face {
-            font-family: 'Minecraft Bold';
-            src: url('MinecraftBold-nMK1.otf') format('truetype');
-        }
-        
-        /* Loading Screen */
-        #loading-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #1a1a1a;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-        }
-        
-        #loading-text {
-            font-family: 'Minecraft Bold', sans-serif;
-            font-size: 24px;
-            margin-top: 20px;
-           background: linear-gradient(124deg, #ff2400, #e81d1d, #e8b71d, #e3e81d, #1de840, #1ddde8, #2b1de8, #dd00f3, #dd00f3);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            animation: rainbow 3s linear infinite;
-            background-size: 400% 100%;
-        }
-        
-        @keyframes rainbow {
-            0% { background-position: 0% 50%; }
-            100% { background-position: 100% 50%; }
-        }
-        
-        #loading-bar {
-            width: 300px;
-            height: 20px;
-            border: 3px solid #4a4a4a;
-            background-color: #2d2d2d;
-            margin-top: 20px;
-            overflow: hidden;
-        }
-        
-        #loading-progress {
-            height: 100%;
-            width: 0%;
-            background: linear-gradient(to right, #4c7f9e, #3a5d7a);
-            transition: width 0.3s ease;
-        }
-        
-        #did-you-know {
-            position: fixed;
-            bottom: 20px;
-            width: 100%;
-            text-align: center;
-            font-family: 'Minecraft', sans-serif;
-            color: #aaaaaa;
-            font-size: 14px;
-            padding: 0 20px;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Opencraft Book Preview</title>
+  <style>
+    @font-face {
+      font-family: 'Minecraft';
+      src: url('MinecraftRegular-Bmg3.otf') format('woff');
+      font-weight: normal;
+      font-style: normal;
+    }
 
-        body {
-            margin: 0;
-            padding: 0;
-            background-image: url('Dirt.webp');
-            background-repeat: repeat;
-            background-color: rgba(0, 0, 0, 0.3);
-            background-blend-mode: multiply;
-            image-rendering: pixelated;
-            font-family: 'Minecraft', sans-serif;
-            color: rgb(255, 255, 255);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        
-        /* Updated logo container styles */
-        .logo-container {
-            position: relative;
-            text-align: center;
-            margin-bottom: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        
-        .logo {
-            max-width: 60%;
-            height: auto;
-            image-rendering: pixelated;
-            filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.7));
-        }
-        
-        /* New dynamic text style */
-        .dynamic-text {
-            position: absolute;
-            top: 70%;
-            left: 70%;
-            transform: translate(-50%, -50%) rotate(-5deg);
-            font-family: 'Minecraft Bold', sans-serif;
-            text-shadow: 2px 2px 0 #1a1a1a;
-            font-size: 20px;
-            white-space: nowrap;
-            transition: color 0.5s ease;
-            background-color: rgba(0, 0, 0, 0.5);
-            padding: 4px 12px;
-            border-radius: 4px;
-            border: 2px solid #4a4a4a;
-            cursor: pointer;
-            user-select: none;
-        }
-        
-        .rainbow-text {
-            background: linear-gradient(124deg, #ff2400, #e81d1d, #e8b71d, #e3e81d, #1de840, #1ddde8, #2b1de8, #dd00f3);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            animation: rainbow 3s linear infinite;
-            background-size: 400% 100%;
-            text-shadow: none;
-        }
-        
-        /* Loading animation for servers */
-        .loading-server {
-            padding: 8px;
-            margin: 4px 0;
-            background-color: rgba(0, 0, 0, 0.5);
-            border: 2px solid #4a4a4a;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .loading-server::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-            animation: loadingShine 1.5s infinite;
-        }
-        
-        @keyframes loadingShine {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-        
-        /* Menu styles */
-        .menu {
-            width: 854px;
-            background-color: rgba(0, 0, 0, 0.7);
-            border: 4px solid #4a4a4a;
-            box-shadow: 0 0 0 2px #1a1a1a;
-            display: none;
-            margin-top: 20px;
-        }
-       
-        .title {
-            background: linear-gradient(to right, #3c3c3c, #2d2d2d);
-            color: white;
-            padding: 8px 12px;
-            border-bottom: 2px solid #1a1a1a;
-            font-family: 'Minecraft Bold', sans-serif;
-            font-size: 18px;
-            text-shadow: 2px 2px 0 #1a1a1a;
-        }
-        
-       .server-list {
-            padding: 12px;
-            max-height: 300px;
-            overflow-y: auto;
-        }
-        
-        .server-entry {
-            padding: 8px;
-            margin: 4px 0;
-            background-color: rgba(0, 0, 0, 0.5);
-            border: 2px solid #4a4a4a;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .server-entry:hover {
-            background-color: rgba(60, 60, 60, 0.7);
-        }
-        
-        .server-name {
-            font-size: 16px;
-            margin-bottom: 2px;
-        }
-        
-        .server-status {
-            font-size: 14px;
-            color: #aaaaaa;
-        }
-        
-        .status-online {
-            color: #55FF55;
-        }
-        
-        .status-offline {
-            color: #ff5555;
-        }
-        
-        .promoted-tag {
-            background-color: #FFD700;
-            color: #1a1a1a;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-size: 12px;
-            margin-left: 8px;
-            font-family: 'Minecraft Bold', sans-serif;
-        }
-        
-        .button-row {
-            display: flex;
-            padding: 8px;
-            gap: 8px;
-            border-top: 2px solid #1a1a1a;
-            background-color: rgba(0, 0, 0, 0.5);
-        }
-        
-        .button {
-            flex: 1;
-            background: linear-gradient(to bottom, #4c7f9e, #3a5d7a);
-            color: white;
-            border: 2px solid #1a1a1a;
-            padding: 8px;
-            font-family: 'Minecraft', sans-serif;
-            font-size: 16px;
-            cursor: pointer;
-            text-shadow: 1px 1px 0 #1a1a1a;
-            image-rendering: pixelated;
-            background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMQAAAAPCAAAAACe4j/AAAAEuElEQVRIx1WWS5Ibuw5EtddrdRRJJE4iSKrb4c2/AUuy30iK+jEBHCTwAICMCgAKiGhKVQUwKzJHQo4mQGBy7AIvk1E2AQKhFt6bUGD1gILy0DkD4dmzACkGyzCScgFgQmLZr4LpQpC56QB2wgSYE8i1fd6xd1yPHIAKwAs14Undx2LIHK0X6vdFbzTa6CNBLQE8Y5rapn7oAl3KSDKC6cLfL6sLnIVG7ffnyUgvQ6rwLjUZdIVqWz0iEXXCZ+TJsV8feUdoPHDk+a/IeAbq0ldLT59jtHweHwmKS6gFSUYCqKcVsPami1pEnqolkCMBiAS87FXTICp03geYUr8TV8un3KuyC0BfTUzihOCdwjUya1bkT9VWe+AaFOoJzHdtERXRe/eulyEDhC6pjYwr+JQuIDU9/0wQBnJEAkd+9i6IRTJrV7YWnGfwLA6ESphkBoCu88M0YH1CTTOiRUpDdwpGkkP5yL9phhwn+QVxDarAXq513y9bLKgxBGR/CjDyMl4ECd6lO82CaMLbEHGHp1R8ePDERj392ssaCOigNjJ+dXXl6OLUFfVx6dA1BFJLlHpkUHPam095C3QJLIjn6OLIOB3xe0JS85Zd+govg1/z/UhtG3RdVW98yxNp5I0Vtf/U+6y/dJ/yHtSK4q7G9ARscC3/Df/kXTwiT3d6ovjEISLJIVEvBwWeCXlALZTbpy85xqWuf3sNiBBUmYjI+BqN6aNQqDWpipSYf3W1nOV/WALoykjIiCPreSn97UigsjZdPA5s3AmCDIxaVO0Fa1fV/qkaiijPPz/bEeRyLSBDI8K8j37TO8aH7vmOqUUQ1DboYhvqd+FlFGEo+2T75MbLGnjvPeu7Pl521Ap14dcR3h7p75qv4xieqnNDoyCPLt/yKkf5gOUXl+6S3d9Syq/982fz+fhpsm28C5EhJcxsWWQke6KoPMA7tqm7kKcrn6FLhWcoqCNCxDPyQ8wEKR73nIlEX8GpARSJX7/rzeNtWPD/Dl2IwtOYMwV7osGsHYJanzeU7KqIZVCTcrT0IEbyD4d1e1dkBtW2qLhLXK7a1ogDqsjI1DR4PY7nHEqfF9tn8HUJL+eQ/lGOXdwI1++57CqgmDaReM9CZYLAk4D4ymqti4KZI9Htz9OnrcuOhCQEqJfXaxHPAFG/l/ee1GFJPXmPryYUiUGPutnRGXkagmnjHk5RNpm7xxiclm6CjJEQ4+MD4xPmuT9Ef4b3YT3B51a7d4Np76PF0cavuC+SoaH6PlilipEakoJBJETWT3k7Hf+1REPj2fIx95t5ct6u9S5v3KM2fv2Ve29ax9yC98zT2IZot61MHyYtdPF92nguZ29xfcVxSu9Nj5Gl8G3wcVoW8n1Q/f6BHFEAyy5R2aRIdYH8XfV4453vHKcnqarXPD6mdrD0rlVV5xBPF2xuJM5Oo0SdaaqGMjJva7ii6bYv74IzPMo5pGebpu72ghypwTR+WWDuhQOkFijGyAzF3GXh11lEH0hkPINZivpTqLEtVm2j1hVcn/S0//q0es5dbyxOErxKivQ+bHotvzcT3/XztPf20XqG6fJZMePT2X6ts+nlm9LoSYHMiHuJjGXniB7v2fo/5qT4nuxYg6AAAAAASUVORK5CYII=);
-	font-family: 'Minecraft';
-  	border-color: #AAA #565656 #565656 #AAA;
-  	text-shadow: 3px 3px #4C4C4C;
-  	outline: 2px solid #000;
-        }
-        
-        .button:hover {
-            background: linear-gradient(to bottom, #5a8fac, #487095);
-        }
-        
-        .button-secondary {
-            background: linear-gradient(to bottom, #6d6d6d, #575757);
-        }
-        
-        .button-secondary:hover {
-            background: linear-gradient(to bottom, #7b7b7b, #656565);
-        }
-        
-        .rare-notification {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: rgba(0, 0, 0, 0.8);
-            border: 3px solid gold;
-            padding: 10px;
-            font-family: 'Minecraft Bold', sans-serif;
-            color: gold;
-            text-shadow: 2px 2px 0 #1a1a1a;
-            display: none;
-            z-index: 100;
-        }
+    body {
+      background: #000000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      font-family: 'Minecraft';
+    }
 
-        a {
-            color: white;
-            text-decoration: none;
-        }
+    /* Book icon on launch */
+    #bookIcon {
+      width: 75px;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
 
-          .server-info-page {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            z-index: 10000;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .server-info-container {
-            width: 800px;
-            background-color: rgba(0, 0, 0, 0.9);
-            border: 4px solid #4a4a4a;
-            box-shadow: 0 0 0 2px #1a1a1a;
-            display: flex;
-            overflow: hidden;
-        }
-        
-        .server-info-content {
-            flex: 1;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .server-info-image {
-            width: 300px;
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            image-rendering: pixelated;
-        }
-        
-        .server-info-title {
-            font-family: 'Minecraft Bold', sans-serif;
-            font-size: 24px;
-            color: #FFD700;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 0 #1a1a1a;
-        }
-        
-        .server-info-address {
-            font-family: 'Minecraft', sans-serif;
-            color: #aaaaaa;
-            margin-bottom: 15px;
-            font-size: 16px;
-        }
-        
-        .server-info-description {
-            font-family: 'Minecraft', sans-serif;
-            color: #ffffff;
-            margin-bottom: 20px;
-            line-height: 1.5;
-            flex-grow: 1;
-        }
-        
-        .server-info-stats {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-        
-        .server-info-stat {
-            font-family: 'Minecraft', sans-serif;
-            color: #ffffff;
-        }
-        
-        .server-info-stat-label {
-            color: #aaaaaa;
-            font-size: 14px;
-        }
-        
-        .server-info-buttons {
-            display: flex;
-            gap: 10px;
-        }
-        
-        .server-info-button {
-            background: linear-gradient(to bottom, #4c7f9e, #3a5d7a);
-            color: white;
-            border: 2px solid #1a1a1a;
-            padding: 8px 16px;
-            font-family: 'Minecraft', sans-serif;
-            font-size: 16px;
-            cursor: pointer;
-            text-shadow: 1px 1px 0 #1a1a1a;
-            image-rendering: pixelated;
-            flex: 1;
-            text-align: center;
-        }
-        
-        .server-info-button:hover {
-            background: linear-gradient(to bottom, #5a8fac, #487095);
-        }
-        
-        .server-info-close {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background-color: rgba(0, 0, 0, 0.7);
-            border: 2px solid #4a4a4a;
-            color: white;
-            width: 30px;
-            height: 30px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            font-family: 'Minecraft Bold', sans-serif;
-        }
-        
-    </style>
+    #bookIcon:hover {
+      
+    }
+
+    .preview_zone {
+      display: none; /* Hide initially */
+      font-size: 22px;
+      width: 277px;
+      height: 366px;
+      background: url('book.png') no-repeat;
+      padding: 33px 35px 33px 38px;
+      line-height: 22px;
+      position: relative;
+      word-break: keep-all;
+    }
+
+    .page {
+      display: none;
+      height: 280px;
+      overflow-y: auto;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    .nav {
+      position: absolute;
+      bottom: 35px;
+      width: 240px;
+      margin-left: 15px;
+    }
+
+    .left {
+      background: url('left.png') no-repeat;
+      width: 50px;
+      height: 28px;
+      float: left;
+      display: none;
+      cursor: pointer;
+    }
+
+    .left:hover {
+      background: url('leftH.png') no-repeat;
+    }
+
+    .right {
+      background: url('right.png') no-repeat;
+      width: 50px;
+      height: 28px;
+      float: right;
+      display: block;
+      cursor: pointer;
+    }
+
+    .right:hover {
+      background: url('rightH.png') no-repeat;
+    }
+  </style>
 </head>
 <body>
-    <!-- Loading Screen -->
-    <div id="loading-screen">
-        <div id="loading-text">Loading Opencraft...</div>
-        <div id="loading-bar">
-            <div id="loading-progress"></div>
-        </div>
-        <div id="did-you-know"></div>
-    </div>
 
-    <div class="logo-container">
-        <img src="Title.png" alt="Minecraft" class="logo">
-        <div id="dynamicText" class="dynamic-text">Version 1.0</div>
+  <!-- Book Icon -->
+  <img id="bookIcon" src="Written_Book.webp" alt="Click to open book">
+
+  <!-- Minecraft Book Preview -->
+  <div class="preview_zone" id="bookPreview">
+    <div class="page active">
+      Welcome to Opencraft, a place where your Minecraft server gets the spotlight it deserves, for free! We're all about creativity, community, and helping you build your dream server world one block at a time.
     </div>
     
-    <!-- Main Menu -->
-    <div class="menu">
-        <div class="title">Servers near you</div>
-        <div class="server-list" id="serverList">
-            <!-- Loading animation will be added by JavaScript -->
-        </div>
-        
-        <div class="title" id="promotedTitle" style="display: none;">Promoting Servers</div>
-        <div class="server-list" id="promotedServerList">
-            <!-- Promoted servers will be loaded here -->
-        </div>
-        
-        <div class="button-row">
-            <button class="button">Join Server</button>
-            <button class="button">Direct Connection</button>
-            <button class="button"><a href="Create Server.html">Create Server</a></button>
-        </div>
-        <div class="button-row">
-            <button class="button button-secondary">Edit</button>
-            <button class="button button-secondary">Delete</button>
-            <button class="button button-secondary" id="refreshButton">Refresh</button>
-            <button class="button button-secondary">Cancel</button>
-        </div>
+    <div class="page">
+      Right now, the website you're visiting is still under construction. That means we're actively working behind the scenes to bring you awesome features, smoother performance, and a truly polished experience.
     </div>
-
-  <div class="server-info-page" id="serverInfoPage">
-        <div class="server-info-container">
-            <div class="server-info-image" id="serverInfoImage"></div>
-            <div class="server-info-content">
-                <div class="server-info-title" id="serverInfoTitle"></div>
-                <div class="server-info-address" id="serverInfoAddress"></div>
-                <div class="server-info-description" id="serverInfoDescription"></div>
-                <div class="server-info-stats">
-                    <div class="server-info-stat">
-                        <div class="server-info-stat-label">VERSION</div>
-                        <div id="serverInfoVersion"></div>
-                    </div>
-                    <div class="server-info-stat">
-                        <div class="server-info-stat-label">PLAYERS</div>
-                        <div id="serverInfoPlayers"></div>
-                    </div>
-                    <div class="server-info-stat">
-                        <div class="server-info-stat-label">STATUS</div>
-                        <div id="serverInfoStatus"></div>
-                    </div>
-                </div>
-                <div class="server-info-buttons">
-                    <button class="server-info-button">JOIN SERVER</button>
-                    <button class="server-info-button">ADD TO FAVORITES</button>
-                </div>
-            </div>
-        </div>
-        <div class="server-info-close" id="serverInfoClose">X</div>
-    </div>
-
-    <div class="rare-notification" id="rareNotification">
-        Rare Block Appeared!
-    </div>
-
-    <!-- Add this to your index.html head section -->
-<script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
-
-<script>
-    // Initialize Firebase with same config as dev panel
-    const firebaseConfig = {
-        apiKey: "YOUR_API_KEY",
-        authDomain: "YOUR_PROJECT.firebaseapp.com",
-        databaseURL: "https://YOUR_PROJECT.firebaseio.com",
-        projectId: "YOUR_PROJECT",
-        storageBucket: "YOUR_PROJECT.appspot.com",
-        messagingSenderId: "YOUR_SENDER_ID",
-        appId: "YOUR_APP_ID"
-    };
     
-    firebase.initializeApp(firebaseConfig);
-    const database = firebase.database();
+    <div class="page">
+      Think of it like laying down the foundation before the rest of the build — we're not quite finished yet, but we're getting there.<br><br>
+      We appreciate your patience and understanding as we continue to develop the site.
+    </div>
+    
+    <div class="page">
+      Your excitement and support mean a lot to us — and we promise that what's coming will be worth the wait.<br><br>
+      Thanks for stopping by!<br>
+      — The Opencraft Team
+    </div>
+    
+    <!-- Navigation -->
+    <div class="nav">
+      <div class="left" onclick="prevPage()"></div>
+      <div class="right" onclick="nextPage()"></div>
+    </div>
+  </div>
 
-    // Modify your loadServers function to use Firebase
-    function loadServers() {
-        const serverList = document.getElementById('serverList');
-        const promotedList = document.getElementById('promotedServerList');
-        
-        database.ref('servers').on('value', (snapshot) => {
-            const servers = snapshot.val();
-            serverList.innerHTML = '';
-            promotedList.innerHTML = '';
-            
-            if (servers) {
-                let hasPromoted = false;
-                
-                Object.keys(servers).forEach((serverId) => {
-                    const server = servers[serverId];
-                    const serverEntry = createServerEntry(server, server.promoted);
-                    
-                    if (server.promoted) {
-                        promotedList.appendChild(serverEntry);
-                        hasPromoted = true;
-                    } else {
-                        serverList.appendChild(serverEntry);
-                    }
-                });
-                
-                if (hasPromoted) {
-                    document.getElementById('promotedTitle').style.display = 'block';
-                }
-            }
-        });
+  <script>
+    const bookIcon = document.getElementById('bookIcon');
+    const bookPreview = document.getElementById('bookPreview');
+    const pages = document.querySelectorAll('.page');
+    const leftBtn = document.querySelector('.left');
+    const rightBtn = document.querySelector('.right');
+    let currentPage = 0;
+
+    // When book icon is clicked
+    bookIcon.addEventListener('click', () => {
+      bookIcon.style.display = 'none';       // Hide the icon
+      bookPreview.style.display = 'block';   // Show the book UI
+    });
+
+    function updateButtons() {
+      leftBtn.style.display = currentPage > 0 ? 'block' : 'none';
+      rightBtn.style.display = currentPage < pages.length - 1 ? 'block' : 'none';
     }
 
-    // Update your createServerEntry function to use server data from Firebase
-    function createServerEntry(server, isPromoted = false) {
-        const serverEntry = document.createElement('div');
-        serverEntry.className = 'server-entry';
-        
-        const serverInfo = document.createElement('div');
-        serverInfo.className = 'server-info';
-        
-        const serverName = document.createElement('div');
-        serverName.className = 'server-name';
-        serverName.textContent = server.name;
-        
-        if (isPromoted) {
-            const promotedTag = document.createElement('span');
-            promotedTag.className = 'promoted-tag';
-            promotedTag.textContent = 'PROMOTED';
-            serverName.appendChild(promotedTag);
-        }
-        
-        const serverStatus = document.createElement('div');
-        serverStatus.className = `server-status ${server.online ? 'status-online' : 'status-offline'}`;
-        serverStatus.textContent = `${server.version} • ${server.players}`;
-        
-        serverInfo.appendChild(serverName);
-        serverInfo.appendChild(serverStatus);
-        serverEntry.appendChild(serverInfo);
-        
-        // Add click handler for server info
-        serverEntry.addEventListener('click', () => {
-            showServerInfo(server);
-        });
-        
-        return serverEntry;
+    function showPage(index) {
+      if (index < 0 || index >= pages.length) return;
+      pages.forEach(page => page.classList.remove('active'));
+      pages[index].classList.add('active');
+      currentPage = index;
+      updateButtons();
     }
 
-    // Update your showServerInfo function to use server data
-    function showServerInfo(server) {
-        document.getElementById('serverInfoTitle').textContent = server.name;
-        document.getElementById('serverInfoAddress').textContent = server.address;
-        document.getElementById('serverInfoVersion').textContent = server.version;
-        document.getElementById('serverInfoPlayers').textContent = server.players;
-        document.getElementById('serverInfoStatus').textContent = server.online ? 'Online' : 'Offline';
-        document.getElementById('serverInfoStatus').className = server.online ? 'status-online' : 'status-offline';
-        document.getElementById('serverInfoDescription').textContent = server.description || 'No description available';
-        
-        if (server.image) {
-            document.getElementById('serverInfoImage').style.backgroundImage = `url('${server.image}')`;
-        } else {
-            document.getElementById('serverInfoImage').style.backgroundImage = 'url("default-server-icon.png")';
-        }
-        
-        document.getElementById('serverInfoPage').style.display = 'flex';
-        document.querySelector('.menu').style.display = 'none';
+    function nextPage() {
+      showPage(currentPage + 1);
     }
-</script>
 
-    <script>
-        // Color options and messages
-        const colorOptions = [
-            { color: '#FFD700', message: 'Version 1.0' },
-            { color: '#FFD700', message: 'Ben was here :)' },
-            { color: '#FFD700', message: 'Cause im a creep, im a weirdo.' },
-            { color: '#55FF55', message: 'Creeper, aw man' },
-            { color: '#FF5555', message: 'FLINT AND STEEL!!!! O_O' },
-            { color: '#800000', message: 'THE NETHER.' },
-            { color: '#5555FF', message: 'CHICKEN JOCKEY!!!!' },
-            { color: '#FFAA00', message: 'Best website in existance' },
-            { color: '#AA00AA', message: 'Mama dat burn' },
-            { color: '#00AAAA', message: 'abcdefghijklmnopqrstuvwxyz' },
-        ];
-
-        // Rare messages for rainbow effect
-        const rareMessages = [
-            'we89fh9e8fh0e98',
-            'RAINBOW ROAD!!!!!',
-            'Wish Ben a happy birthday on sept 1',
-            'LEGENDARY EDITION!'
-        ];
-
-        // Sample server data (replace with actual API call)
-        const sampleServers = [
-            { name: "Hypixel Network", address: "mc.hypixel.net", version: "1.8-1.20", online: true, players: "50,000+"  },
-            { name: "Mineplex", address: "us.mineplex.com", version: "1.8-1.20", online: true, players: "10,000+" },
-            { name: "The Hive", address: "play.hivemc.com", version: "1.8-1.20", online: false, players: "Offline" },
-            { name: "Cubecraft", address: "play.cubecraft.net", version: "1.8-1.20", online: true, players: "5,000+" }
-        ];
-
-        // Sample promoted servers
-        const promotedServers = [
-            { name: "Pixelmon Realm", address: "play.pixelmonrealm.com", version: "1.12.2", online: true, players: "2,000+", promoted: true },
-            { name: "Skyblock Network", address: "skyblock.net", version: "1.16-1.20", online: true, players: "8,000+", promoted: true },
-            { name: "Minigame Madness", address: "mgm.net", version: "1.8-1.20", online: true, players: "3,000+", promoted: true }
-        ];
-
-        
-        // Initialize when page loads
-        window.addEventListener('load', function() {
-            // Set dynamic text
-            setDynamicText();
-            
-            // Start loading simulation
-            simulateLoading();
-            
-            // Set random background
-            setRandomBackground();
-            
-            // Set overlay darkness
-            document.body.style.backgroundColor = 'rgba(0, 0, 0, 0.3)';
-            document.body.style.backgroundBlendMode = 'multiply';
-            
-            // Add loading animation to server list
-            createLoadingAnimation();
-            
-            // Load servers after 1 second
-            setTimeout(loadServers, 1000);
-            
-            // Add click handler to refresh button
-            document.getElementById('refreshButton').addEventListener('click', function() {
-                createLoadingAnimation();
-                setTimeout(loadServers, 1000);
-            });
-        });
-
-        // Create loading animation
-        function createLoadingAnimation() {
-            const serverList = document.getElementById('serverList');
-            serverList.innerHTML = '';
-            
-            // Add 4 loading placeholders
-            for (let i = 0; i < 4; i++) {
-                const loadingEntry = document.createElement('div');
-                loadingEntry.className = 'loading-server';
-                
-                const name = document.createElement('div');
-                name.className = 'server-name';
-                name.textContent = 'Loading...';
-                
-                const status = document.createElement('div');
-                status.className = 'server-status';
-                status.textContent = '#################';
-                
-                loadingEntry.appendChild(name);
-                loadingEntry.appendChild(status);
-                serverList.appendChild(loadingEntry);
-            }
-            
-            // Hide promoted section while loading
-            document.getElementById('promotedTitle').style.display = 'none';
-            document.getElementById('promotedServerList').innerHTML = '';
-        }
-
-        // Load servers
-        function loadServers() {
-            const serverList = document.getElementById('serverList');
-            serverList.innerHTML = '';
-            
-            // In a real implementation, you would fetch from an API here
-            // For now we'll use the sample data
-            sampleServers.forEach(server => {
-                const serverEntry = document.createElement('div');
-                serverEntry.className = 'server-entry';
-                
-                const serverName = document.createElement('div');
-                serverName.className = 'server-name';
-                serverName.textContent = server.name;
-                
-                const serverStatus = document.createElement('div');
-                serverStatus.className = `server-status ${server.online ? 'status-online' : 'status-offline'}`;
-                serverStatus.textContent = `${server.version} • ${server.players} • ${server.online ? 'Online' : 'Offline'}`;
-                
-                serverEntry.appendChild(serverName);
-                serverEntry.appendChild(serverStatus);
-                serverList.appendChild(serverEntry);
-            });
-            
-            // Load promoted servers
-            loadPromotedServers();
-        }
-
-        // Load promoted servers
-        function loadPromotedServers() {
-            const promotedList = document.getElementById('promotedServerList');
-            promotedList.innerHTML = '';
-            
-            if (promotedServers.length > 0) {
-                document.getElementById('promotedTitle').style.display = 'block';
-                
-                promotedServers.forEach(server => {
-                    const serverEntry = document.createElement('div');
-                    serverEntry.className = 'server-entry';
-                    
-                    const serverName = document.createElement('div');
-                    serverName.className = 'server-name';
-                    
-                    const nameSpan = document.createElement('span');
-                    nameSpan.textContent = server.name;
-                    serverName.appendChild(nameSpan);
-                    
-                    if (server.promoted) {
-                        const promotedTag = document.createElement('span');
-                        promotedTag.className = 'promoted-tag';
-                        promotedTag.textContent = 'PROMOTED';
-                        serverName.appendChild(promotedTag);
-                    }
-                    
-                    const serverStatus = document.createElement('div');
-                    serverStatus.className = `server-status ${server.online ? 'status-online' : 'status-offline'}`;
-                    serverStatus.textContent = `${server.version} • ${server.players} • ${server.online ? 'Online' : 'Offline'}`;
-                    
-                    serverEntry.appendChild(serverName);
-                    serverEntry.appendChild(serverStatus);
-                    promotedList.appendChild(serverEntry);
-                });
-            }
-        }
-
-        function setDynamicText() {
-            const textElement = document.getElementById('dynamicText');
-            const isRare = Math.random() < 0.05; // 5% chance for rainbow
-            
-            if (isRare) {
-                // Rare rainbow effect
-                textElement.classList.add('rainbow-text');
-                const rareIndex = Math.floor(Math.random() * rareMessages.length);
-                textElement.textContent = rareMessages[rareIndex];
-            } else {
-                // Regular colored text
-                textElement.classList.remove('rainbow-text');
-                const colorIndex = Math.floor(Math.random() * colorOptions.length);
-                const selectedColor = colorOptions[colorIndex];
-                textElement.style.color = selectedColor.color;
-                textElement.textContent = selectedColor.message;
-            }
-        }
-
-        // List of common block textures
-        const commonBlocks = [
-            'Dirt.webp',
-            'StoneB.webp',
-            'Bookshelf.webp',
-            'Observer.webp',
-            'Grass_block.webp',
-            'Allow.webp',
-            'Carved_Pumpkin.webp',
-            'On_Redstone_Lamp.webp',
-            'Jukebox.webp',
-            'Crafting_Table.webp',
-            'Off_Furnace.webp',
-            'Dropper.webp',
-            'Beacon.webp',
-            
-        ];
-        
-        // List of rare block textures (10% chance to appear)
-        const rareBlocks = [
-            'Diamonds!.webp',
-            'End_Portal_Frame.webp',
-            'Bedrock.webp',
-            'Info_update.webp',
-            'Debug.webp',
-            'Nether_Reactor.webp',
-            'Missing_Texture.webp',
-            'Glowing_Obsidian.webp',
-            'Information_block.webp',
-            'Teleport_block.webp',
-        ];
-
-        // Did You Know facts
-        const funFacts = [
-            "Did you know? Creepers were created by accident when trying to make pigs!",
-            "Did you know? The Enderman's sounds are reversed human voices!",
-            "Did you know? Minecraft was originally called 'Cave Game'!",
-            "Did you know? The Nether was inspired by hell dimensions in other games!",
-            "Did you know? Redstone was based on electrical circuitry!",
-            "Did you know? The Ender Dragon is actually female!",
-            "Did you know? Minecraft's original textures were made in Paint!",
-            "Did you know? The game has over 140 million monthly players!",
-            "Did you know? The strongest block is bedrock, but the weakest is... a torch!",
-            "Did you know? You can make over 16 million different colored wool blocks!",
-            "Hey Vsause, Michael here.",
-            "Did you know?",
-            "[content deleted]",
-            "Did you know? That the dev's birthday is on September 1st? Wish him a happy birthday on that day for me, would ya?",
-            "lol",
-        ];
-
-        // Track the last used background
-        let lastBackground = '';
-        let lastFactIndex = -1;
-        
-        // Function to get a random fact
-        function getRandomFact() {
-            let randomIndex;
-            do {
-                randomIndex = Math.floor(Math.random() * funFacts.length);
-            } while (randomIndex === lastFactIndex && funFacts.length > 1);
-            
-            lastFactIndex = randomIndex;
-            return funFacts[randomIndex];
-        }
-        
-        // Function to get a different random background
-        function getNewBackground() {
-            const isRare = Math.random() < 0.1;
-            const pool = isRare ? rareBlocks : commonBlocks;
-            let availableOptions = pool.filter(bg => bg !== lastBackground);
-            
-            if (availableOptions.length === 0) {
-                availableOptions = pool;
-            }
-            
-            const newIndex = Math.floor(Math.random() * availableOptions.length);
-            const selectedBg = availableOptions[newIndex];
-            lastBackground = selectedBg;
-            
-            return {
-                texture: selectedBg,
-                isRare: isRare
-            };
-        }
-        
-        // Function to set random background
-        function setRandomBackground() {
-            const notification = document.getElementById('rareNotification');
-            const {texture, isRare} = getNewBackground();
-            
-            if (isRare) {
-                notification.style.display = 'block';
-                setTimeout(() => {
-                    notification.style.display = 'none';
-                }, 3000);
-            }
-            
-            document.body.style.backgroundImage = `url('${texture}')`;
-        }
-        
-        // Simulate loading process
-        function simulateLoading() {
-            const loadingProgress = document.getElementById('loading-progress');
-            const loadingScreen = document.getElementById('loading-screen');
-            const menu = document.querySelector('.menu');
-            const didYouKnow = document.getElementById('did-you-know');
-            
-            // Show random fact
-            didYouKnow.textContent = getRandomFact();
-            
-            let progress = 0;
-            const interval = setInterval(() => {
-                progress += Math.random() * 10;
-                if (progress > 100) progress = 100;
-                loadingProgress.style.width = progress + '%';
-                
-                if (progress >= 100) {
-                    clearInterval(interval);
-                    loadingScreen.style.opacity = '0';
-                    setTimeout(() => {
-                        loadingScreen.style.display = 'none';
-                        menu.style.display = 'block';
-                    }, 500);
-                }
-            }, 200);
-        }
-
-        window.addEventListener('storage', function(e) {
-    if (e.key === 'opencraft_site_settings') {
-        const settings = JSON.parse(e.newValue);
-        applySettings(settings);
+    function prevPage() {
+      showPage(currentPage - 1);
     }
-});
-    </script>
+
+    // Initialize
+    showPage(0);
+  </script>
 </body>
 </html>
